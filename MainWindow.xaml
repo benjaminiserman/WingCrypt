@@ -1,0 +1,31 @@
+﻿<Window x:Class="WingCrypt.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="600">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<Label>Files to Encrypt/Decrypt</Label>
+		<TreeView Grid.Row="1" x:Name="fileTreeView" />
+
+		<Button x:Name="addFileButton" Grid.Row="2" Padding="5,0" Click="ButtonAddFile_Click">Select Files</Button>
+
+		<Grid Grid.Row="3">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<Button x:Name="encryptButton" Grid.Column="0" Padding="5,0" Click="ButtonEncrypt_Click">Encrypt</Button>
+			<Button x:Name="decryptButton" Grid.Column="1" Padding="5,0" Click="ButtonDecrypt_Click">Decrypt</Button>
+		</Grid>
+	</Grid>
+</Window>
