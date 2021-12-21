@@ -43,7 +43,7 @@ public partial class MainWindow : Window
 
 		if (dialog.ShowDialog() == true)
 		{
-			if (dialog.FileName[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME)
+			if (dialog.FileName.Length >= DEFAULT_FILE_NAME.Length && dialog.FileName[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME)
 			{
 				dialog.FileName = dialog.FileName[..^(DEFAULT_FILE_NAME.Length + 1)];
 			}
