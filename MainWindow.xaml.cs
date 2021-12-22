@@ -39,33 +39,38 @@ public partial class MainWindow : Window
 		dialog.ValidateNames = false;
 		dialog.CheckFileExists = false;
 		dialog.CheckPathExists = true;
+		dialog.Multiselect = true;
 		dialog.FileName = DEFAULT_FILE_NAME;
 
 		if (dialog.ShowDialog() == true)
 		{
-			if (dialog.FileName.Length >= DEFAULT_FILE_NAME.Length && dialog.FileName[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME)
+			foreach (string fileName in dialog.FileNames)
 			{
-				dialog.FileName = dialog.FileName[..^(DEFAULT_FILE_NAME.Length + 1)];
+				string working = fileName;
+				if (working.Length >= DEFAULT_FILE_NAME.Length && working[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME)
+				{
+					working = working[..^(DEFAULT_FILE_NAME.Length + 1)];
+				}
+
+				bool isFile = File.Exists(working);
+				bool isDirectory = Directory.Exists(working);
+
+				if (!isFile && !isDirectory)
+				{
+					MessageBox.Show($"File or directory {working} does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					return;
+				}
+
+				if ((isDirectory && ContainsAll(fileTreeView.Items, working)) ||
+					(isFile && ContainsNode(fileTreeView.Items, working)))
+				{
+					MessageBox.Show($"Files to Encrypt/Decrypt already contains {working}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					return;
+				}
+
+				int matches = 0;
+				AddNodeRecursive(GetNode(fileTreeView.Items, working, ref matches), working, true, matches);
 			}
-
-			bool isFile = File.Exists(dialog.FileName);
-			bool isDirectory = Directory.Exists(dialog.FileName);
-
-			if (!isFile && !isDirectory)
-			{
-				MessageBox.Show($"File or directory {dialog.FileName} does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				return;
-			}
-
-			if ((isDirectory && ContainsAll(fileTreeView.Items, dialog.FileName)) || 
-				(isFile && ContainsNode(fileTreeView.Items, dialog.FileName)))
-			{
-				MessageBox.Show($"Files to Encrypt/Decrypt already contains {dialog.FileName}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				return;
-			}
-
-			int matches = 0;
-			AddNodeRecursive(GetNode(fileTreeView.Items, dialog.FileName, ref matches), dialog.FileName, true, matches);
 		}
 	}
 
@@ -77,5 +82,25 @@ public partial class MainWindow : Window
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
 	{
 
+	}
+
+	private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+	{
+		if (fileTreeView.SelectedItem is not TreeViewItem item)
+		{
+			MessageBox.Show($"No files have been selected to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+		else
+		{
+			if (item.Parent is TreeViewItem itemParent)
+			{
+				itemParent.Items.Remove(item);
+			}
+			else if (item.Parent is TreeView viewParent)
+			{
+				viewParent.Items.Remove(item);
+			}
+		}
 	}
 }
