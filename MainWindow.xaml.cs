@@ -87,7 +87,7 @@ public partial class MainWindow : Window
 
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
 	{
-
+		Decryptor.Decrypt("")
 	}
 
 	private void ButtonDelete_Click(object sender, RoutedEventArgs e)

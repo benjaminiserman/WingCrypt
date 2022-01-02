@@ -16,8 +16,8 @@ internal static class Encryptor
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Encrypt(TreeView tree, string path, string key)
 	{
-		string zipPath = Path.Combine(path, "_wingcrypttemp.zip");
-		string encPath = Path.Combine(path, "_wingcrypttemp.enc");
+		string zipPath = Path.Combine(path, SharedConstants.WORKING_NAME);
+		string encPath = Path.Combine(path, SharedConstants.DEFAULT_NAME);
 
 		using (ZipFile zip = new())
 		{
@@ -41,7 +41,7 @@ internal static class Encryptor
 
 			aes.Mode = CipherMode.CBC;
 			aes.Key = keyBuffer;
-			aes.IV = new byte[] { 69, 42, 39, 0, 3, 13, 87, 27, 121, 62, 1, 111, 245, 73, 199, 154 };
+			aes.IV = SharedConstants.IV;
 			// initialization vector bytes courtesy of Kraber Queen
 
 			var encryptor = aes.CreateEncryptor();
@@ -52,5 +52,7 @@ internal static class Encryptor
 
 			zipStream.CopyTo(cryptoStream);
 		}
+
+		// $$$ DELETE ZIP
 	}
 }
