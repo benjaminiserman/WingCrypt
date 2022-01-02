@@ -163,4 +163,29 @@ internal static class FileExplorer
 
 		return count == paths.Count();
 	}
+
+	internal static IEnumerable<string> EnumerateFiles(TreeView tree)
+	{
+		foreach (TreeViewItem item in tree.Items)
+		{
+			foreach (string found in EnumerateInner(item, string.Empty)) yield return found;
+		}
+	}
+
+	private static IEnumerable<string> EnumerateInner(TreeViewItem item, string path)
+	{
+		path = Path.Combine(path, item.Header.ToString());
+
+		if (item.Items.Count > 0)
+		{
+			foreach (TreeViewItem next in item.Items)
+			{
+				foreach (string found in EnumerateInner(next, path)) yield return found;
+			}
+		}
+		else
+		{
+			yield return path;
+		}
+	}
 }

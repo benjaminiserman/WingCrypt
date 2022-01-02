@@ -76,7 +76,13 @@ public partial class MainWindow : Window
 
 	private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
 	{
+		string headerPath = ((TreeViewItem)fileTreeView.Items[0]).Header.ToString();
+		string path = headerPath;
 
+		string[] split = headerPath.Split('\\');
+		if (split.Length > 1) path = Path.Combine(split[..^1]);
+
+		Encryptor.Encrypt(fileTreeView, path, "roar");
 	}
 
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
