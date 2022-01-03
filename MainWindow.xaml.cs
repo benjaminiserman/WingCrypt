@@ -76,6 +76,12 @@ public partial class MainWindow : Window
 
 	private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
 	{
+		if (fileTreeView.Items.Count == 0)
+		{
+			MessageBox.Show($"No files are set to encrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+
 		string headerPath = ((TreeViewItem)fileTreeView.Items[0]).Header.ToString();
 		string path = headerPath;
 
@@ -83,11 +89,30 @@ public partial class MainWindow : Window
 		if (split.Length > 1) path = Path.Combine(split[..^1]);
 
 		Encryptor.Encrypt(fileTreeView, path, "roar");
+		fileTreeView.Items.Clear();
 	}
 
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
 	{
-		Decryptor.Decrypt("")
+		if (fileTreeView.Items.Count == 0)
+		{
+			MessageBox.Show($"No files are set to decypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+
+		int count = 0;
+
+		foreach (string enc in EnumerateFiles(fileTreeView))
+		{
+			if (enc.Length > SharedConstants.FILETYPE.Length && enc[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE)
+			{
+				Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], "roar");
+				count++;
+			}
+		}
+
+		if (count == 0) MessageBox.Show($"No .enc files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		else fileTreeView.Items.Clear();
 	}
 
 	private void ButtonDelete_Click(object sender, RoutedEventArgs e)

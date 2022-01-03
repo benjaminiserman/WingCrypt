@@ -17,7 +17,7 @@ internal static class Encryptor
 	public static void Encrypt(TreeView tree, string path, string key)
 	{
 		string zipPath = Path.Combine(path, SharedConstants.WORKING_NAME);
-		string encPath = Path.Combine(path, SharedConstants.DEFAULT_NAME);
+		string encPath = Path.Combine(path, $"{((TreeViewItem)tree.Items[0]).Header}{SharedConstants.FILETYPE}");
 
 		using (ZipFile zip = new())
 		{
@@ -37,12 +37,13 @@ internal static class Encryptor
 		using (Aes aes = Aes.Create())
 		{
 			byte[] keyBuffer = new byte[32];
-			Array.Copy(Encoding.UTF8.GetBytes(key), keyBuffer, 0);
+			byte[] encoded = Encoding.UTF8.GetBytes(key);
+			Array.Copy(encoded, keyBuffer, keyBuffer.Length < encoded.Length ? keyBuffer.Length : encoded.Length);
 
 			aes.Mode = CipherMode.CBC;
 			aes.Key = keyBuffer;
 			aes.IV = SharedConstants.IV;
-			// initialization vector bytes courtesy of Kraber Queen
+			aes.Padding = PaddingMode.PKCS7;
 
 			var encryptor = aes.CreateEncryptor();
 
@@ -53,6 +54,6 @@ internal static class Encryptor
 			zipStream.CopyTo(cryptoStream);
 		}
 
-		// $$$ DELETE ZIP
+		File.Delete(zipPath);
 	}
 }
