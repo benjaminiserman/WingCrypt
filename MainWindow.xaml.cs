@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
 using Microsoft.Win32;
 using static FileExplorer;
 using Path = System.IO.Path;
@@ -90,6 +91,7 @@ public partial class MainWindow : Window
 
 		Encryptor.Encrypt(fileTreeView, path, "roar");
 		fileTreeView.Items.Clear();
+		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
 
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
@@ -106,13 +108,28 @@ public partial class MainWindow : Window
 		{
 			if (enc.Length > SharedConstants.FILETYPE.Length && enc[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE)
 			{
-				Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], "roar");
-				count++;
+				try
+				{
+					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], "roar");
+					count++;
+				}
+				catch (IOException)
+				{
+					MessageBox.Show($"Cannot decrypt {enc} because file or directory {enc[..^SharedConstants.FILETYPE.Length]} already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+				catch (CryptographicException)
+				{
+					MessageBox.Show($"Decryption failed on {enc}. Your key may be incorrect.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
 			}
 		}
 
 		if (count == 0) MessageBox.Show($"No .enc files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-		else fileTreeView.Items.Clear();
+		else
+		{
+			fileTreeView.Items.Clear();
+			MessageBox.Show("Decryption completed.", "Decryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
+		}
 	}
 
 	private void ButtonDelete_Click(object sender, RoutedEventArgs e)
