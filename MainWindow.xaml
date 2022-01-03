@@ -11,6 +11,7 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
 		<Grid.ContextMenu>
@@ -21,10 +22,21 @@
 
 		<Label>Files to Encrypt/Decrypt</Label>
 		<TreeView Grid.Row="1" x:Name="fileTreeView" />
-		
-		<Button x:Name="addFileButton" Grid.Row="2" Padding="5,0" Click="ButtonAddFile_Click">Select Files</Button>
 
-		<Grid Grid.Row="3">
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Column="0" Text="Enter Key Value:" Padding="10,0"/>
+			<TextBox x:Name="keyTextBox" Grid.Column="1" TextWrapping="NoWrap" AcceptsReturn="False" AcceptsTab="False" VerticalScrollBarVisibility="Disabled" Grid.Row="2" Padding="5,0" />
+			
+		</Grid>
+
+		<Button x:Name="addFileButton" Grid.Row="3" Padding="5,0" Click="ButtonAddFile_Click">Select Files</Button>
+
+		<Grid Grid.Row="4">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>

@@ -16,8 +16,15 @@ internal static class Encryptor
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Encrypt(TreeView tree, string path, string key)
 	{
+		string name = (string)((TreeViewItem)tree.Items[0]).Header;
+
+		if (((TreeViewItem)tree.Items[0]).Items.Count != 0 && !FileExplorer.ContainsAll(tree.Items, name))
+		{
+			name = Path.Combine(name, (string)((TreeViewItem)((TreeViewItem)tree.Items[0]).Items[0]).Header);
+		}
+
 		string zipPath = Path.Combine(path, SharedConstants.WORKING_NAME);
-		string encPath = Path.Combine(path, $"{((TreeViewItem)tree.Items[0]).Header}{SharedConstants.FILETYPE}");
+		string encPath = Path.Combine(path, $"{name}{SharedConstants.FILETYPE}");
 
 		using (ZipFile zip = new())
 		{
@@ -28,7 +35,7 @@ internal static class Encryptor
 
 			foreach (string found in FileExplorer.EnumerateFiles(tree))
 			{
-				zip.AddItem(found, Path.Combine(found.Split('\\')[offset..]));
+				zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
 			}
 
 			zip.Save(zipPath);

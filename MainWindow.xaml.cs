@@ -83,15 +83,19 @@ public partial class MainWindow : Window
 			return;
 		}
 
+		Mouse.OverrideCursor = Cursors.Wait;
+
 		string headerPath = ((TreeViewItem)fileTreeView.Items[0]).Header.ToString();
 		string path = headerPath;
 
 		string[] split = headerPath.Split('\\');
 		if (split.Length > 1) path = Path.Combine(split[..^1]);
 
-		Encryptor.Encrypt(fileTreeView, path, "roar");
+		Encryptor.Encrypt(fileTreeView, path, keyTextBox.Text);
 		fileTreeView.Items.Clear();
 		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
+
+		Mouse.OverrideCursor = null;
 	}
 
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
@@ -102,6 +106,8 @@ public partial class MainWindow : Window
 			return;
 		}
 
+		Mouse.OverrideCursor = Cursors.Wait;
+
 		int count = 0;
 
 		foreach (string enc in EnumerateFiles(fileTreeView))
@@ -110,7 +116,7 @@ public partial class MainWindow : Window
 			{
 				try
 				{
-					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], "roar");
+					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], keyTextBox.Text);
 					count++;
 				}
 				catch (IOException)
@@ -124,12 +130,14 @@ public partial class MainWindow : Window
 			}
 		}
 
-		if (count == 0) MessageBox.Show($"No .enc files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		if (count == 0) MessageBox.Show($"No {SharedConstants.FILETYPE} files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		else
 		{
 			fileTreeView.Items.Clear();
 			MessageBox.Show("Decryption completed.", "Decryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 		}
+
+		Mouse.OverrideCursor = null;
 	}
 
 	private void ButtonDelete_Click(object sender, RoutedEventArgs e)
