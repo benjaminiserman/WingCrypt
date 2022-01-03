@@ -1,10 +1,4 @@
 ﻿namespace WingCrypt;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 internal static class SharedConstants
 {
 	internal const string WORKING_NAME = "_wingcrypttemp.zip";

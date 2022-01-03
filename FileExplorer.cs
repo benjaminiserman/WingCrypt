@@ -2,8 +2,8 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Controls;
 using System.Linq;
+using System.Windows.Controls;
 
 internal static class FileExplorer
 {

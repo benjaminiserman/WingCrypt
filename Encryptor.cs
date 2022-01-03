@@ -1,19 +1,13 @@
 ﻿namespace WingCrypt;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.IO;
 using System.Security.Cryptography;
-using Microsoft.Win32;
+using System.Text;
+using System.Windows.Controls;
 using Ionic.Zip;
 
 internal static class Encryptor
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Encrypt(TreeView tree, string path, string key)
 	{
 		string name = (string)((TreeViewItem)tree.Items[0]).Header;

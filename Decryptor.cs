@@ -1,19 +1,12 @@
 ﻿namespace WingCrypt;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.IO;
 using System.Security.Cryptography;
-using Microsoft.Win32;
+using System.Text;
 using Ionic.Zip;
 
 internal static class Decryptor
 { 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Decrypt(string path, string newPath, string key)
 	{
 		string zipPath = Path.Combine(Path.Combine(path.Split('\\')[..^1]), SharedConstants.WORKING_NAME);
