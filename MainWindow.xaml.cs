@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shell;
 using Microsoft.Win32;
 using static FileExplorer;
 using Path = System.IO.Path;

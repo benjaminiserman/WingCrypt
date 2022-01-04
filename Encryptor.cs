@@ -22,7 +22,6 @@ internal static class Encryptor
 
 		using (ZipFile zip = new())
 		{
-
 			string[] pathSplit = path.Split('\\');
 			int offset = pathSplit.Length;
 			if (pathSplit.Length > 1) offset++;
