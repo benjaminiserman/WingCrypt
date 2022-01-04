@@ -1,8 +1,6 @@
 ﻿namespace WingCrypt;
-using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 using Ionic.Zip;
 
 internal static class Decryptor

@@ -13,7 +13,6 @@ internal static class SharedConstants
 	{
 		byte[] keyBuffer = new byte[32];
 		byte[] encoded = Encoding.UTF8.GetBytes(key);
-		//Array.Copy(encoded, keyBuffer, keyBuffer.Length < encoded.Length ? keyBuffer.Length : encoded.Length);
 
 		for (int i = 0; i < encoded.Length; i++)
 		{
