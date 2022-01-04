@@ -19,6 +19,19 @@ public partial class MainWindow : Window
 	{
 		DataContext = this;
 		InitializeComponent();
+
+		if (!string.IsNullOrWhiteSpace(App.StartPath))
+		{
+			if (File.Exists(App.StartPath) || Directory.Exists(App.StartPath))
+			{
+				int matches = 0;
+				AddNodeRecursive(GetNode(fileTreeView.Items, App.StartPath, ref matches), App.StartPath, true, matches);
+			}
+			else
+			{
+				MessageBox.Show($"File or directory {App.StartPath} does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
 	}
 
 	private void ButtonAddFile_Click(object sender, RoutedEventArgs e)
@@ -35,7 +48,7 @@ public partial class MainWindow : Window
 			foreach (string fileName in dialog.FileNames)
 			{
 				string working = fileName;
-				if (working.Length >= DEFAULT_FILE_NAME.Length && working[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME)
+				if (working.Length >= DEFAULT_FILE_NAME.Length && working[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME) // for selecting directories
 				{
 					working = working[..^(DEFAULT_FILE_NAME.Length + 1)];
 				}
