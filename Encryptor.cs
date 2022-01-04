@@ -53,12 +53,9 @@ internal static class Encryptor
 				zipStream.CopyTo(cryptoStream);
 			}
 		}
-		catch
+		finally
 		{
 			File.Delete(zipPath);
-			throw;
 		}
-
-		File.Delete(zipPath);
 	}
 }
