@@ -94,7 +94,7 @@ public partial class MainWindow : Window
 
 		try
 		{
-			Encryptor.Encrypt(fileTreeView, path, keyTextBox.Text);
+			Encryptor.Encrypt(fileTreeView, path, keyTextBox.Password);
 		}
 		catch { return; }
 		finally
@@ -125,7 +125,7 @@ public partial class MainWindow : Window
 			{
 				try
 				{
-					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], keyTextBox.Text);
+					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], keyTextBox.Password);
 					count++;
 				}
 				catch (IOException)
