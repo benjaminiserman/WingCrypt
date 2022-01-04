@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Ionic.Zip;
 using Microsoft.Win32;
 using static FileExplorer;
 using Path = System.IO.Path;
@@ -91,11 +92,18 @@ public partial class MainWindow : Window
 		string[] split = headerPath.Split('\\');
 		if (split.Length > 1) path = Path.Combine(split[..^1]);
 
-		Encryptor.Encrypt(fileTreeView, path, keyTextBox.Text);
-		fileTreeView.Items.Clear();
-		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
+		try
+		{
+			Encryptor.Encrypt(fileTreeView, path, keyTextBox.Text);
+		}
+		catch { return; }
+		finally
+		{
+			fileTreeView.Items.Clear();
+			Mouse.OverrideCursor = null;
+		}
 
-		Mouse.OverrideCursor = null;
+		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
 
 	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
@@ -109,6 +117,7 @@ public partial class MainWindow : Window
 		Mouse.OverrideCursor = Cursors.Wait;
 
 		int count = 0;
+		bool errored = false;
 
 		foreach (string enc in EnumerateFiles(fileTreeView))
 		{
@@ -121,16 +130,28 @@ public partial class MainWindow : Window
 				}
 				catch (IOException)
 				{
+					MessageBox.Show($"Could not find file {enc}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					fileTreeView.Items.Clear();
+					errored = true;
+					break;
+				}
+				catch (ZipException)
+				{
 					MessageBox.Show($"Cannot decrypt {enc} because file or directory {enc[..^SharedConstants.FILETYPE.Length]} already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					errored = true;
 				}
 				catch (CryptographicException)
 				{
 					MessageBox.Show($"Decryption failed on {enc}. Your key may be incorrect.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					errored = true;
 				}
 			}
 		}
 
-		if (count == 0) MessageBox.Show($"No {SharedConstants.FILETYPE} files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		if (count == 0)
+		{
+			if (!errored) MessageBox.Show($"No {SharedConstants.FILETYPE} files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 		else
 		{
 			fileTreeView.Items.Clear();

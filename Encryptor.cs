@@ -1,6 +1,8 @@
 ﻿namespace WingCrypt;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Windows;
 using System.Windows.Controls;
 using Ionic.Zip;
 
@@ -27,9 +29,20 @@ internal static class Encryptor
 				int offset = pathSplit.Length;
 				if (pathSplit.Length > 1) offset++;
 
+				int count = FileExplorer.EnumerateFiles(tree).Count(); // fix single-file encryption
+				if (count == 1) offset--;
+
 				foreach (string found in FileExplorer.EnumerateFiles(tree))
 				{
-					zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
+					try
+					{
+						zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
+					}
+					catch
+					{
+						MessageBox.Show($"Could not find file {found}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+						throw;
+					}
 				}
 
 				zip.Save(zipPath);
