@@ -6,6 +6,7 @@ using Ionic.Zip;
 
 internal static class Encryptor
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Encrypt(TreeView tree, string path, string key)
 	{
 		string name = (string)((TreeViewItem)tree.Items[0]).Header;
@@ -57,5 +58,7 @@ internal static class Encryptor
 			File.Delete(zipPath);
 			throw;
 		}
+
+		File.Delete(zipPath);
 	}
 }

@@ -29,16 +29,16 @@ internal static class Decryptor
 
 		try
 		{
-			using (ZipFile zip = new(zipPath))
-			{
-				Directory.CreateDirectory(newPath);
-				zip.ExtractAll(newPath);
-			}
+			using ZipFile zip = new(zipPath);
+			Directory.CreateDirectory(newPath);
+			zip.ExtractAll(newPath);
 		}
 		catch
 		{
 			File.Delete(zipPath);
 			throw;
 		}
+
+		File.Delete(zipPath);
 	}
 }
