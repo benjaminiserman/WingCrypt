@@ -27,12 +27,18 @@ internal static class Decryptor
 			encStream.CopyTo(cryptoStream);
 		}
 
-		using (ZipFile zip = new(zipPath))
+		try
 		{
-			Directory.CreateDirectory(newPath);
-			zip.ExtractAll(newPath);
+			using (ZipFile zip = new(zipPath))
+			{
+				Directory.CreateDirectory(newPath);
+				zip.ExtractAll(newPath);
+			}
 		}
-
-		File.Delete(zipPath);
+		catch
+		{
+			File.Delete(zipPath);
+			throw;
+		}
 	}
 }

@@ -18,38 +18,44 @@ internal static class Encryptor
 		string zipPath = Path.Combine(path, SharedConstants.WORKING_NAME);
 		string encPath = Path.Combine(path, $"{name}{SharedConstants.FILETYPE}");
 
-		using (ZipFile zip = new())
+		try
 		{
-			string[] pathSplit = path.Split('\\');
-			int offset = pathSplit.Length;
-			if (pathSplit.Length > 1) offset++;
-
-			foreach (string found in FileExplorer.EnumerateFiles(tree))
+			using (ZipFile zip = new())
 			{
-				zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
+				string[] pathSplit = path.Split('\\');
+				int offset = pathSplit.Length;
+				if (pathSplit.Length > 1) offset++;
+
+				foreach (string found in FileExplorer.EnumerateFiles(tree))
+				{
+					zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
+				}
+
+				zip.Save(zipPath);
 			}
 
-			zip.Save(zipPath);
-		}
+			using (Aes aes = Aes.Create())
+			{
+				byte[] keyBuffer = SharedConstants.BuildKey(key);
 
-		using (Aes aes = Aes.Create())
+				aes.Mode = CipherMode.CBC;
+				aes.Key = keyBuffer;
+				aes.IV = SharedConstants.IV;
+				aes.Padding = PaddingMode.PKCS7;
+
+				var encryptor = aes.CreateEncryptor();
+
+				using FileStream encStream = new(encPath, FileMode.Create);
+				using CryptoStream cryptoStream = new(encStream, encryptor, CryptoStreamMode.Write);
+				using FileStream zipStream = new(zipPath, FileMode.Open);
+
+				zipStream.CopyTo(cryptoStream);
+			}
+		}
+		catch
 		{
-			byte[] keyBuffer = SharedConstants.BuildKey(key);
-
-			aes.Mode = CipherMode.CBC;
-			aes.Key = keyBuffer;
-			aes.IV = SharedConstants.IV;
-			aes.Padding = PaddingMode.PKCS7;
-
-			var encryptor = aes.CreateEncryptor();
-
-			using FileStream encStream = new(encPath, FileMode.Create);
-			using CryptoStream cryptoStream = new(encStream, encryptor, CryptoStreamMode.Write);
-			using FileStream zipStream = new(zipPath, FileMode.Open);
-
-			zipStream.CopyTo(cryptoStream);
+			File.Delete(zipPath);
+			throw;
 		}
-
-		File.Delete(zipPath);
 	}
 }
