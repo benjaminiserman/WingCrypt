@@ -36,9 +36,7 @@ internal static class Encryptor
 
 		using (Aes aes = Aes.Create())
 		{
-			byte[] keyBuffer = new byte[32];
-			byte[] encoded = Encoding.UTF8.GetBytes(key);
-			Array.Copy(encoded, keyBuffer, keyBuffer.Length < encoded.Length ? keyBuffer.Length : encoded.Length);
+			byte[] keyBuffer = SharedConstants.BuildKey(key);
 
 			aes.Mode = CipherMode.CBC;
 			aes.Key = keyBuffer;
