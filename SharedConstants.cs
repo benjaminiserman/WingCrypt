@@ -1,5 +1,4 @@
 ﻿namespace WingCrypt;
-using System.Text;
 using System.Security.Cryptography;
 
 internal static class SharedConstants
