@@ -192,7 +192,6 @@ public partial class MainWindow : Window
 		}
 		else
 		{
-
 			string oldPath = GetPath(fileTreeView, item);
 
 			string name = Interaction.InputBox($"What would you like to rename {item.Header} to?", "Rename Prompt", (string)item.Header);
