@@ -53,8 +53,6 @@ internal static class Encryptor
 				byte[] salt = SharedConstants.GenerateSalt();
 				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password, SharedConstants.XOR(salt));
 
-				File.WriteAllBytes("salt.txt", SharedConstants.XOR(salt));
-
 				aes.Mode = CipherMode.CBC;
 				aes.Key = keyBuffer;
 				aes.IV = IV;

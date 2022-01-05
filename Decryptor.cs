@@ -19,8 +19,6 @@ internal static class Decryptor
 				byte[] salt = new byte[16];
 				encStream.Read(salt, 0, salt.Length);
 
-				File.WriteAllBytes("salt.txt", SharedConstants.XOR(salt));
-
 				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password, SharedConstants.XOR(salt));
 
 				aes.Mode = CipherMode.CBC;
