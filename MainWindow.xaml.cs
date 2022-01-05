@@ -210,4 +210,22 @@ public partial class MainWindow : Window
 			}
 		}
 	}
+
+	private void Window_KeyDown(object sender, KeyEventArgs e)
+	{
+		if (e.Key == Key.Enter)
+		{
+			if (fileTreeView.Items.Count > 0)
+			{
+				if (EnumerateFiles(fileTreeView).All(x => x.Length > SharedConstants.FILETYPE.Length && x[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE))
+				{
+					ButtonDecrypt_Click(this, null);
+				}
+				else
+				{
+					ButtonEncrypt_Click(this, null);
+				}
+			}
+		}
+	}
 }
