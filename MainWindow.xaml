@@ -15,7 +15,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		
+
 
 		<Label>Files to Encrypt/Decrypt</Label>
 		<TreeView Grid.Row="1" x:Name="fileTreeView">
