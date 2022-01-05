@@ -33,8 +33,8 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Column="0" Text="Enter Key Value:" Padding="10,0"/>
-			<PasswordBox x:Name="keyTextBox" Grid.Column="1" Grid.Row="2" Padding="5,0" />
+			<TextBlock Grid.Column="0" Text="Enter Password:" Padding="10,0"/>
+			<PasswordBox x:Name="passwordTextBox" Grid.Column="1" Grid.Row="2" Padding="5,0" />
 		</Grid>
 
 		<Button x:Name="addFileButton" Grid.Row="3" Padding="5,0" Click="ButtonAddFile_Click">Select Files</Button>

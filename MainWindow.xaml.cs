@@ -96,7 +96,7 @@ public partial class MainWindow : Window
 
 		try
 		{
-			Encryptor.Encrypt(fileTreeView, path, keyTextBox.Password);
+			Encryptor.Encrypt(fileTreeView, path, passwordTextBox.Password);
 		}
 		catch { return; }
 		finally
@@ -127,7 +127,7 @@ public partial class MainWindow : Window
 			{
 				try
 				{
-					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], keyTextBox.Password);
+					Decryptor.Decrypt(enc, enc[..^SharedConstants.FILETYPE.Length], passwordTextBox.Password);
 					count++;
 				}
 				catch (IOException)
@@ -144,7 +144,7 @@ public partial class MainWindow : Window
 				}
 				catch (CryptographicException)
 				{
-					MessageBox.Show($"Decryption failed on {enc}. Your key may be incorrect.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					MessageBox.Show($"Decryption failed on {enc}. Your password may be incorrect.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 					errored = true;
 				}
 			}

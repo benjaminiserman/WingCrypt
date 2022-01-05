@@ -1,24 +1,22 @@
 ﻿namespace WingCrypt;
 using System.Text;
+using System.Security.Cryptography;
 
 internal static class SharedConstants
 {
 	internal const string WORKING_NAME = "_wingcrypttemp.zip";
 	internal const string FILETYPE = ".wenc";
 
-	internal static byte[] IV => new byte[] { 69, 42, 39, 0, 3, 13, 87, 27, 121, 62, 1, 111, 245, 73, 199, 154 };
-	// initialization vector bytes courtesy of Kraber Queen
+	private static byte[] Salt => new byte[] { 69, 42, 39, 0, 3, 13, 87, 27, 121, 62, 1, 111, 245, 73, 199, 154 };
+	// salt bytes courtesy of Kraber Queen
 
-	public static byte[] BuildKey(string key)
+	public static (byte[], byte[]) BuildKeyAndIV(string key)
 	{
-		byte[] keyBuffer = new byte[32];
-		byte[] encoded = Encoding.UTF8.GetBytes(key);
-
-		for (int i = 0; i < encoded.Length; i++)
+		Rfc2898DeriveBytes pbkdf2 = new(key, Salt)
 		{
-			keyBuffer[i % keyBuffer.Length] ^= encoded[i];
-		}
+			IterationCount = 1_024_000
+		};
 
-		return keyBuffer;
+		return (pbkdf2.GetBytes(32), pbkdf2.GetBytes(16));
 	}
 }

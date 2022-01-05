@@ -9,7 +9,7 @@ using Ionic.Zip;
 internal static class Encryptor
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
-	public static void Encrypt(TreeView tree, string path, string key)
+	public static void Encrypt(TreeView tree, string path, string password)
 	{
 		string name = (string)((TreeViewItem)tree.Items[0]).Header;
 
@@ -50,11 +50,11 @@ internal static class Encryptor
 
 			using (Aes aes = Aes.Create())
 			{
-				byte[] keyBuffer = SharedConstants.BuildKey(key);
+				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password);
 
 				aes.Mode = CipherMode.CBC;
 				aes.Key = keyBuffer;
-				aes.IV = SharedConstants.IV;
+				aes.IV = IV;
 				aes.Padding = PaddingMode.PKCS7;
 
 				var encryptor = aes.CreateEncryptor();
