@@ -98,7 +98,7 @@ public partial class MainWindow : Window
 		{
 			Encryptor.Encrypt(fileTreeView, path, passwordTextBox.Password);
 		}
-		catch { return; }
+		catch (FileNotFoundException) { return; }
 		finally
 		{
 			fileTreeView.Items.Clear();

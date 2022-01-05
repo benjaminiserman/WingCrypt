@@ -14,7 +14,14 @@ internal static class Decryptor
 		{
 			using (Aes aes = Aes.Create())
 			{
-				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password);
+				using FileStream encStream = new(path, FileMode.Open);
+
+				byte[] salt = new byte[16];
+				encStream.Read(salt, 0, salt.Length);
+
+				File.WriteAllBytes("salt.txt", SharedConstants.XOR(salt));
+
+				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password, SharedConstants.XOR(salt));
 
 				aes.Mode = CipherMode.CBC;
 				aes.Key = keyBuffer;
@@ -25,7 +32,6 @@ internal static class Decryptor
 
 				using FileStream zipStream = new(zipPath, FileMode.Create);
 				using CryptoStream cryptoStream = new(zipStream, encryptor, CryptoStreamMode.Write);
-				using FileStream encStream = new(path, FileMode.Open);
 
 				encStream.CopyTo(cryptoStream);
 			}

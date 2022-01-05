@@ -50,7 +50,10 @@ internal static class Encryptor
 
 			using (Aes aes = Aes.Create())
 			{
-				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password);
+				byte[] salt = SharedConstants.GenerateSalt();
+				(byte[] keyBuffer, byte[] IV) = SharedConstants.BuildKeyAndIV(password, SharedConstants.XOR(salt));
+
+				File.WriteAllBytes("salt.txt", SharedConstants.XOR(salt));
 
 				aes.Mode = CipherMode.CBC;
 				aes.Key = keyBuffer;
@@ -63,6 +66,7 @@ internal static class Encryptor
 				using CryptoStream cryptoStream = new(encStream, encryptor, CryptoStreamMode.Write);
 				using FileStream zipStream = new(zipPath, FileMode.Open);
 
+				encStream.Write(salt);
 				zipStream.CopyTo(cryptoStream);
 			}
 		}
