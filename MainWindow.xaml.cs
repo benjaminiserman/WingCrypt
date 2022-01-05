@@ -1,10 +1,12 @@
 ﻿namespace WingCrypt;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Ionic.Zip;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using static FileExplorer;
 using Path = System.IO.Path;
@@ -165,7 +167,7 @@ public partial class MainWindow : Window
 	{
 		if (fileTreeView.SelectedItem is not TreeViewItem item)
 		{
-			MessageBox.Show($"No files have been selected to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show($"No file has been selected to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			return;
 		}
 		else
@@ -177,6 +179,34 @@ public partial class MainWindow : Window
 			else if (item.Parent is TreeView viewParent)
 			{
 				viewParent.Items.Remove(item);
+			}
+		}
+	}
+
+	private void ButtonRename_Click(object sender, RoutedEventArgs e)
+	{
+		if (fileTreeView.SelectedItem is not TreeViewItem item)
+		{
+			MessageBox.Show($"No file has been selected to rename.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+		else
+		{
+
+			string oldPath = GetPath(fileTreeView, item);
+
+			string name = Interaction.InputBox($"What would you like to rename {item.Header} to?", "Rename Prompt", (string)item.Header);
+			item.Header = name;
+
+			string path = GetPath(fileTreeView, item);
+
+			if (File.Exists(oldPath))
+			{
+				File.Move(oldPath, path);
+			}
+			else if (Directory.Exists(oldPath))
+			{
+				Directory.Move(oldPath, path);
 			}
 		}
 	}

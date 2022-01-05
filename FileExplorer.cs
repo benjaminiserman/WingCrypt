@@ -187,4 +187,30 @@ internal static class FileExplorer
 			yield return path;
 		}
 	}
+
+	internal static string GetPath(TreeView tree, TreeViewItem item)
+	{
+		foreach (TreeViewItem found in tree.Items)
+		{
+			string foundPath = GetPath(found, item, (string)found.Header);
+
+			if (!string.IsNullOrEmpty(foundPath)) return foundPath;
+		}
+
+		return null;
+	}
+
+	private static string GetPath(TreeViewItem node, TreeViewItem item, string path)
+	{
+		if (node == item) return path;
+
+		foreach (TreeViewItem found in node.Items)
+		{
+			string foundPath = GetPath(found, item, Path.Combine(path, (string)found.Header));
+
+			if (!string.IsNullOrEmpty(foundPath)) return foundPath;
+		}
+
+		return null;
+	}
 }
