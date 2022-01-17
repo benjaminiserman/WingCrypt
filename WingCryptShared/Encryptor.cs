@@ -1,25 +1,16 @@
-﻿namespace WingCryptWPF;
+﻿namespace WingCryptShared;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Windows;
-using System.Windows.Controls;
 using Ionic.Zip;
 
-internal static class Encryptor
+public static class Encryptor
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
-	public static void Encrypt(TreeView tree, string path, string password)
+	public static void Encrypt(IFileTree tree, string path, string password)
 	{
-		string name = (string)((TreeViewItem)tree.Items[0]).Header;
-
-		if (((TreeViewItem)tree.Items[0]).Items.Count != 0 && !FileExplorer.ContainsAll(tree.Items, name))
-		{
-			name = Path.Combine(name, (string)((TreeViewItem)((TreeViewItem)tree.Items[0]).Items[0]).Header);
-		}
-
 		string zipPath = Path.Combine(path, SharedConstants.WORKING_NAME);
-		string encPath = Path.Combine(path, $"{name}{SharedConstants.FILETYPE}");
+		string encPath = Path.Combine(path, $"{tree.Name}{SharedConstants.FILETYPE}");
 
 		try
 		{
@@ -29,20 +20,12 @@ internal static class Encryptor
 				int offset = pathSplit.Length;
 				if (pathSplit.Length > 1) offset++;
 
-				int count = FileExplorer.EnumerateFiles(tree).Count(); // fix single-file encryption
+				int count = tree.EnumerateFiles().Count(); // fix single-file encryption
 				if (count == 1) offset--;
 
-				foreach (string found in FileExplorer.EnumerateFiles(tree))
+				foreach (string found in tree.EnumerateFiles())
 				{
-					try
-					{
-						zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
-					}
-					catch
-					{
-						MessageBox.Show($"Could not find file {found}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-						throw;
-					}
+					zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
 				}
 
 				zip.Save(zipPath);

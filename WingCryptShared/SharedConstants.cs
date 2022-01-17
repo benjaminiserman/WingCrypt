@@ -1,11 +1,11 @@
-﻿namespace WingCryptWPF;
+﻿namespace WingCryptShared;
 using System.Linq;
 using System.Security.Cryptography;
 
-internal static class SharedConstants
+public static class SharedConstants
 {
-	internal const string WORKING_NAME = "_wingcrypttemp.zip";
-	internal const string FILETYPE = ".wenc";
+	public const string WORKING_NAME = "_wingcrypttemp.zip";
+	public const string FILETYPE = ".wenc";
 
 	private static byte[] XORSalt => new byte[] { 69, 42, 39, 0, 3, 13, 87, 27, 121, 62, 1, 111, 245, 73, 199, 154 };
 	// salt bytes courtesy of Kraber Queen

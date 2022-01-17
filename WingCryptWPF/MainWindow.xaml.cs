@@ -5,10 +5,10 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Ionic.Zip;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
-using static FileExplorer;
+using WingCryptShared;
+using static FileTree;
 using Path = System.IO.Path;
 
 /// <summary>
@@ -18,10 +18,14 @@ public partial class MainWindow : Window
 {
 	const string DEFAULT_FILE_NAME = @"Selecting current directory";
 
+	private readonly FileTree _fileTree;
+
 	public MainWindow()
 	{
 		DataContext = this;
 		InitializeComponent();
+
+		_fileTree = new(fileTreeView);
 
 		if (!string.IsNullOrWhiteSpace(App.StartPath))
 		{
@@ -96,9 +100,12 @@ public partial class MainWindow : Window
 
 		try
 		{
-			Encryptor.Encrypt(fileTreeView, path, passwordTextBox.Password);
+			Encryptor.Encrypt(_fileTree, path, passwordTextBox.Password);
 		}
-		catch (FileNotFoundException) { return; }
+		catch (FileNotFoundException ex)
+		{
+			MessageBox.Show($"Could not find file {ex.FileName}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 		finally
 		{
 			fileTreeView.Items.Clear();
@@ -121,7 +128,7 @@ public partial class MainWindow : Window
 		int count = 0;
 		bool errored = false;
 
-		foreach (string enc in EnumerateFiles(fileTreeView))
+		foreach (string enc in _fileTree.EnumerateFiles())
 		{
 			if (enc.Length > SharedConstants.FILETYPE.Length && enc[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE)
 			{
@@ -192,12 +199,12 @@ public partial class MainWindow : Window
 		}
 		else
 		{
-			string oldPath = GetPath(fileTreeView, item);
+			string oldPath = _fileTree.GetPath(item);
 
 			string name = Interaction.InputBox($"What would you like to rename {item.Header} to?", "Rename Prompt", (string)item.Header);
 			item.Header = name;
 
-			string path = GetPath(fileTreeView, item);
+			string path = _fileTree.GetPath(item);
 
 			if (File.Exists(oldPath))
 			{
@@ -216,7 +223,7 @@ public partial class MainWindow : Window
 		{
 			if (fileTreeView.Items.Count > 0)
 			{
-				if (EnumerateFiles(fileTreeView).All(x => x.Length > SharedConstants.FILETYPE.Length && x[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE))
+				if (_fileTree.EnumerateFiles().All(x => x.Length > SharedConstants.FILETYPE.Length && x[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE))
 				{
 					ButtonDecrypt_Click(this, null);
 				}

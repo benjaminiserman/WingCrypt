@@ -1,9 +1,9 @@
-﻿namespace WingCryptWPF;
+﻿namespace WingCryptShared;
 using System.IO;
 using System.Security.Cryptography;
 using Ionic.Zip;
 
-internal static class Decryptor
+public static class Decryptor
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Decrypt(string path, string newPath, string password)
@@ -39,6 +39,10 @@ internal static class Decryptor
 				Directory.CreateDirectory(newPath);
 				zip.ExtractAll(newPath);
 			}
+		}
+		catch (Ionic.Zip.ZipException ex)
+		{
+			throw new ZipException(ex);
 		}
 		finally
 		{
