@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingCrypt", "WingCrypt.csproj", "{411375B1-5A59-40B9-9558-D711A0B2EFED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingCrypt", "WingCryptWPF\WingCryptWPF.csproj", "{411375B1-5A59-40B9-9558-D711A0B2EFED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
