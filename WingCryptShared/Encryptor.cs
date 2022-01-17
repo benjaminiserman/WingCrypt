@@ -25,7 +25,7 @@ public static class Encryptor
 
 				foreach (string found in tree.EnumerateFiles())
 				{
-					zip.AddItem(found, Path.Combine(found.Split('\\')[offset..^1]));
+					zip.AddItem(found, Path.Combine(found.Split('\\').SubFromEnd(offset, 1)));
 				}
 
 				zip.Save(zipPath);
@@ -47,7 +47,7 @@ public static class Encryptor
 				using CryptoStream cryptoStream = new(encStream, encryptor, CryptoStreamMode.Write);
 				using FileStream zipStream = new(zipPath, FileMode.Open);
 
-				encStream.Write(salt);
+				encStream.Write(salt, 0, salt.Length);
 				zipStream.CopyTo(cryptoStream);
 			}
 		}

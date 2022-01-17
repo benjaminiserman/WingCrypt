@@ -8,7 +8,7 @@ public static class Decryptor
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Decrypt(string path, string newPath, string password)
 	{
-		string zipPath = Path.Combine(Path.Combine(path.Split('\\')[..^1]), SharedConstants.WORKING_NAME);
+		string zipPath = Path.Combine(Path.Combine(path.Split('\\').SubFromEnd(0, 1)), SharedConstants.WORKING_NAME);
 
 		try
 		{

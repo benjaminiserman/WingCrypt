@@ -20,7 +20,13 @@ public static class SharedConstants
 		return (pbkdf2.GetBytes(32), pbkdf2.GetBytes(16));
 	}
 
-	public static byte[] GenerateSalt() => RandomNumberGenerator.GetBytes(16);
+	public static byte[] GenerateSalt()
+	{
+		byte[] buffer = new byte[16];
+		RandomNumberGenerator.Create().GetBytes(buffer);
+
+		return buffer;
+	}
 
 	public static byte[] XOR(byte[] salt) => salt.Zip(XORSalt, (x, y) => (byte)(x ^ y)).ToArray();
 }
