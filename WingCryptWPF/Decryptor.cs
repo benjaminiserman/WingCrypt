@@ -1,4 +1,4 @@
-﻿namespace WingCrypt;
+﻿namespace WingCryptWPF;
 using System.IO;
 using System.Security.Cryptography;
 using Ionic.Zip;
