@@ -82,12 +82,12 @@ public partial class MainWindow : Window
 		}
 	}
 
-	private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
+	private bool DoEncrypt()
 	{
 		if (fileTreeView.Items.Count == 0)
 		{
 			MessageBox.Show($"No files are set to encrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			return;
+			return false;
 		}
 
 		Mouse.OverrideCursor = Cursors.Wait;
@@ -98,9 +98,16 @@ public partial class MainWindow : Window
 		string[] split = headerPath.Split('\\');
 		if (split.Length > 1) path = Path.Combine(split[..^1]);
 
+		Encryptor.Encrypt(_fileTree, path, passwordTextBox.Password);
+
+		return true;
+	}
+
+	private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
+	{
 		try
 		{
-			Encryptor.Encrypt(_fileTree, path, passwordTextBox.Password);
+			if (!DoEncrypt()) return;
 		}
 		catch (FileNotFoundException ex)
 		{
@@ -233,5 +240,32 @@ public partial class MainWindow : Window
 				}
 			}
 		}
+	}
+
+	private void ButtonEncryptAndDelete_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			if (!DoEncrypt()) return;
+
+			if (MessageBox.Show($"Are you sure you want to delete the unencrypted files? This is irreversible.", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+			{
+				foreach (string path in _fileTree.EnumerateFiles())
+				{
+					File.Delete(path);
+				}
+			}
+		}
+		catch (FileNotFoundException ex)
+		{
+			MessageBox.Show($"Could not find file {ex.FileName}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+		finally
+		{
+			fileTreeView.Items.Clear();
+			Mouse.OverrideCursor = null;
+		}
+
+		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
 }
