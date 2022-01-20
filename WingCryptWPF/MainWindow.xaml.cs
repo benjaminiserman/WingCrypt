@@ -177,11 +177,11 @@ public partial class MainWindow : Window
 		Mouse.OverrideCursor = null;
 	}
 
-	private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+	private void ButtonRemove_Click(object sender, RoutedEventArgs e)
 	{
 		if (fileTreeView.SelectedItem is not TreeViewItem item)
 		{
-			MessageBox.Show($"No file has been selected to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show($"No file has been selected to remove.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			return;
 		}
 		else
