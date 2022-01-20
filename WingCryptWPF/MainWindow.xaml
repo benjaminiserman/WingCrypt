@@ -15,13 +15,11 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-
-
 		<Label>Files to Encrypt/Decrypt</Label>
 		<TreeView Grid.Row="1" x:Name="fileTreeView">
 			<TreeView.ContextMenu>
 				<ContextMenu Name="treeViewContextMenu">
-					<MenuItem Header="Delete" Click="ButtonDelete_Click"/>
+					<MenuItem Header="Remove" Click="ButtonRemove_Click"/>
 					<MenuItem Header="Rename" Click="ButtonRename_Click"/>
 				</ContextMenu>
 			</TreeView.ContextMenu>
@@ -45,7 +43,11 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="encryptButton" Grid.Column="0" Padding="5,0" Click="ButtonEncrypt_Click">Encrypt</Button>
+			<UniformGrid Columns="2" Grid.Column="0">
+				<Button x:Name="encryptButton" Padding="5,0" Click="ButtonEncrypt_Click">Encrypt</Button>
+				<Button x:Name="encryptAndDeleteButton" Padding="5,0" Click="ButtonEncryptAndDelete_Click">Encrypt And Delete</Button>
+			</UniformGrid>
+
 			<Button x:Name="decryptButton" Grid.Column="1" Padding="5,0" Click="ButtonDecrypt_Click">Decrypt</Button>
 		</Grid>
 	</Grid>
