@@ -14,6 +14,8 @@ public static class BootlegRange
 		return output;
 	}
 
+	public static T[] Sub<T>(this T[] array, int start) => Sub(array, start, array.Length);
+
 	// [x..^y]
 	public static T[] SubFromEnd<T>(this T[] array, int start, int end) => Sub(array, start, array.Length - end);
 }
