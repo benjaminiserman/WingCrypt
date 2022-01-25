@@ -19,4 +19,16 @@
   <ItemGroup>
     <ProjectReference Include="..\..\WingCryptShared\WingCryptShared.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FolderListPage.xaml.cs">
+      <DependentUpon>FolderListPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="FolderListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

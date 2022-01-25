@@ -1,24 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WingCryptXamarin.MainPage"
-			 BackgroundColor="#2F3136">
+             x:Class="WingCryptXamarin.FolderListPage">
 
 	<Grid RowDefinitions="*, 50">
-		<AbsoluteLayout Grid.Row="0">
-			<Label x:Name="explainLabel"
-				   TextColor="#8E9297"
-				   AbsoluteLayout.LayoutBounds=".5,.55"
-				   AbsoluteLayout.LayoutFlags="PositionProportional">Click the plus button at the bottom right to add files.</Label>
-		</AbsoluteLayout>
+		<ListView x:Name="MyListView"
+			Grid.Row="0"
+            ItemsSource="{Binding Items}"
+            ItemTapped="Handle_ItemTapped"
+            CachingStrategy="RecycleElement">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<TextCell Text="{Binding .}" />
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
 		<AbsoluteLayout Grid.Row="1">
-			<Button Text="+"
+			<Button Text="←"
 					VerticalOptions="Center"
 					HorizontalOptions="Center"
 					BackgroundColor="Cyan"
 					TextColor="White"
 					Font="Consolas"
-					Clicked="AddButtonClicked"
+					Clicked="BackButtonClicked"
 					HeightRequest="40"
 					WidthRequest="40"
 					CornerRadius="20"
@@ -27,5 +32,4 @@
 			</Button>
 		</AbsoluteLayout>
 	</Grid>
-
 </ContentPage>
