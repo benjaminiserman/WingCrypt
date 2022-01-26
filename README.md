@@ -22,7 +22,7 @@ Due to low demand, standalone builds for Mac OSX and Linux are not provided. If 
 
 1. Download either "build.zip" or "standalone.zip" from the latest release, depending on your prerequisites.
 2. Unzip the file.
-3. Find the file "WingCrypt.exe" within the unzipped folder and run it.
+3. Find the file "WingCryptWPF.exe" within the unzipped folder and run it.
 4. Select files or folders to encrypt/decrypt.
 5. Enter a password.
 6. Click either the Encrypt or the Decrypt button.
