@@ -100,9 +100,8 @@ internal class FileTree : IFileTree
 			}
 		}
 
-		if (count == paths.Count())
+		if (count >= paths.Count())
 		{
-			;
 			Directory.Delete(path, true);
 			return true;
 		}
