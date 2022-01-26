@@ -87,6 +87,12 @@ internal class FileTree : IFileTree
 			else collection = node.Items;
 		}
 
+		if (File.Exists(path))
+		{
+			File.Delete(path);
+			return true;
+		}
+
 		int count = 0;
 		foreach (TreeViewItem item in collection)
 		{
@@ -114,8 +120,7 @@ internal class FileTree : IFileTree
 			}
 
 			return false;
-		}
-		
+		}	
 	}
 
 	private static TreeViewItem Find(ItemCollection collection, string path, int matches = 0)
