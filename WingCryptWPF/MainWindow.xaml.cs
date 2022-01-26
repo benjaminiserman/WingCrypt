@@ -91,6 +91,8 @@ public partial class MainWindow : Window
 			return false;
 		}
 
+		if (!ConfirmPassword()) return false;
+
 		Mouse.OverrideCursor = Cursors.Wait;
 
 		string headerPath = ((TreeViewItem)fileTreeView.Items[0]).Header.ToString();
@@ -116,9 +118,10 @@ public partial class MainWindow : Window
 		}
 		finally
 		{
-			fileTreeView.Items.Clear();
 			Mouse.OverrideCursor = null;
 		}
+
+		fileTreeView.Items.Clear();
 
 		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
@@ -274,9 +277,10 @@ public partial class MainWindow : Window
 		}
 		finally
 		{
-			fileTreeView.Items.Clear();
 			Mouse.OverrideCursor = null;
 		}
+
+		fileTreeView.Items.Clear();
 
 		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
@@ -305,6 +309,28 @@ public partial class MainWindow : Window
 		finally
 		{
 			Mouse.OverrideCursor = null;
+		}
+	}
+
+	private bool ConfirmPassword()
+	{
+		try
+		{
+			string confirm = PasswordDialog.GetPassword();
+
+			if (confirm == passwordTextBox.Password)
+			{
+				return true;
+			}
+			else
+			{
+				MessageBox.Show($"Passwords did not match. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+		}
+		catch
+		{
+			return false;
 		}
 	}
 }
