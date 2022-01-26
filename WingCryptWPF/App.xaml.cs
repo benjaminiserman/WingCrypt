@@ -1,4 +1,4 @@
-﻿namespace WingCrypt;
+﻿namespace WingCryptWPF;
 using System.Windows;
 
 /// <summary>

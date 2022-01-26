@@ -1,7 +1,7 @@
-﻿<Application x:Class="WingCrypt.App"
+﻿<Application x:Class="WingCryptWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WingCrypt"
+             xmlns:local="clr-namespace:WingCryptWPF"
              Startup="ApplicationStartup">
 	<Application.Resources>
 
