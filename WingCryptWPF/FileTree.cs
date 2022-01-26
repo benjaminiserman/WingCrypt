@@ -30,11 +30,11 @@ internal class FileTree : IFileTree
 	{
 		foreach (TreeViewItem item in _tree.Items)
 		{
-			foreach (string found in EnumerateInner(item, string.Empty)) yield return found;
+			foreach (string found in EnumerateFiles(item, string.Empty)) yield return found;
 		}
 	}
 
-	private static IEnumerable<string> EnumerateInner(TreeViewItem item, string path)
+	private static IEnumerable<string> EnumerateFiles(TreeViewItem item, string path)
 	{
 		path = Path.Combine(path, item.Header.ToString());
 
@@ -42,7 +42,7 @@ internal class FileTree : IFileTree
 		{
 			foreach (TreeViewItem next in item.Items)
 			{
-				foreach (string found in EnumerateInner(next, path)) yield return found;
+				foreach (string found in EnumerateFiles(next, path)) yield return found;
 			}
 		}
 		else
@@ -74,6 +74,49 @@ internal class FileTree : IFileTree
 		}
 
 		return count == paths.Count();
+	}
+
+	internal static bool DeleteFolders(ItemCollection collection, string path, bool find = true)
+	{
+		IEnumerable<string> paths = Directory.EnumerateFileSystemEntries(path);
+
+		if (find)
+		{
+			TreeViewItem node = Find(collection, path);
+			if (node is null) return false;
+			else collection = node.Items;
+		}
+
+		int count = 0;
+		foreach (TreeViewItem item in collection)
+		{
+			if (paths.Any(x => x.Split('\\')[^1] == (string)item.Header))
+			{
+				string newPath = paths.First(x => x.Split('\\')[^1] == (string)item.Header);
+				if (!Directory.Exists(newPath) || DeleteFolders(item.Items, Path.Combine(path, (string)item.Header), false))
+				{
+					count++;
+				}
+			}
+		}
+
+		if (count == paths.Count())
+		{
+			;
+			Directory.Delete(path, true);
+			return true;
+		}
+		else
+		{
+			foreach (TreeViewItem item in collection)
+			{
+				string deleteFilePath = Path.Combine(path, item.Header.ToString());
+				if (File.Exists(deleteFilePath)) File.Delete(deleteFilePath);
+			}
+
+			return false;
+		}
+		
 	}
 
 	private static TreeViewItem Find(ItemCollection collection, string path, int matches = 0)

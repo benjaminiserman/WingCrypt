@@ -1,4 +1,5 @@
 ﻿namespace WingCryptWPF;
+using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -82,12 +83,12 @@ public partial class MainWindow : Window
 		}
 	}
 
-	private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
+	private bool DoEncrypt()
 	{
 		if (fileTreeView.Items.Count == 0)
 		{
 			MessageBox.Show($"No files are set to encrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			return;
+			return false;
 		}
 
 		Mouse.OverrideCursor = Cursors.Wait;
@@ -98,9 +99,16 @@ public partial class MainWindow : Window
 		string[] split = headerPath.Split('\\');
 		if (split.Length > 1) path = Path.Combine(split[..^1]);
 
+		Encryptor.Encrypt(_fileTree, path, passwordTextBox.Password);
+
+		return true;
+	}
+
+	private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
+	{
 		try
 		{
-			Encryptor.Encrypt(_fileTree, path, passwordTextBox.Password);
+			if (!DoEncrypt()) return;
 		}
 		catch (FileNotFoundException ex)
 		{
@@ -115,18 +123,17 @@ public partial class MainWindow : Window
 		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
 
-	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
+	private int DoDecrypt()
 	{
 		if (fileTreeView.Items.Count == 0)
 		{
 			MessageBox.Show($"No files are set to decypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			return;
+			return 0;
 		}
 
 		Mouse.OverrideCursor = Cursors.Wait;
 
 		int count = 0;
-		bool errored = false;
 
 		foreach (string enc in _fileTree.EnumerateFiles())
 		{
@@ -141,40 +148,52 @@ public partial class MainWindow : Window
 				{
 					MessageBox.Show($"Could not find file {enc}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 					fileTreeView.Items.Clear();
-					errored = true;
-					break;
+					throw new Exception($"Could not find file {enc}.");
 				}
 				catch (ZipException)
 				{
 					MessageBox.Show($"Cannot decrypt {enc} because file or directory {enc[..^SharedConstants.FILETYPE.Length]} already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					errored = true;
+					throw new Exception($"Cannot decrypt {enc} because file or directory {enc[..^SharedConstants.FILETYPE.Length]} already exists.");
 				}
 				catch (CryptographicException)
 				{
 					MessageBox.Show($"Decryption failed on {enc}. Your password may be incorrect.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					errored = true;
+					throw new Exception($"Decryption failed on {enc}. Your password may be incorrect.");
 				}
 			}
 		}
 
-		if (count == 0)
-		{
-			if (!errored) MessageBox.Show($"No {SharedConstants.FILETYPE} files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-		}
-		else
-		{
-			fileTreeView.Items.Clear();
-			MessageBox.Show("Decryption completed.", "Decryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
-		}
-
-		Mouse.OverrideCursor = null;
+		return count;
 	}
 
-	private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+	private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			int count = DoDecrypt();
+
+			if (count == 0)
+			{
+				MessageBox.Show($"No {SharedConstants.FILETYPE} files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+			else
+			{
+				fileTreeView.Items.Clear();
+				MessageBox.Show("Decryption completed.", "Decryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
+			}
+		}
+		catch { }
+		finally
+		{
+			Mouse.OverrideCursor = null;
+		}
+	}
+
+	private void ButtonRemove_Click(object sender, RoutedEventArgs e)
 	{
 		if (fileTreeView.SelectedItem is not TreeViewItem item)
 		{
-			MessageBox.Show($"No file has been selected to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show($"No file has been selected to remove.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			return;
 		}
 		else
@@ -232,6 +251,60 @@ public partial class MainWindow : Window
 					ButtonEncrypt_Click(this, null);
 				}
 			}
+		}
+	}
+
+	private void ButtonEncryptAndDelete_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			if (!DoEncrypt()) return;
+
+			if (MessageBox.Show($"Are you sure you want to delete the unencrypted files? This is irreversible.", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+			{
+				foreach (TreeViewItem item in fileTreeView.Items)
+				{
+					DeleteFolders(fileTreeView.Items, item.Header.ToString());
+				}
+			}
+		}
+		catch (FileNotFoundException ex)
+		{
+			MessageBox.Show($"Could not find file {ex.FileName}. Did you make changes to the directory after adding it? Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+		finally
+		{
+			fileTreeView.Items.Clear();
+			Mouse.OverrideCursor = null;
+		}
+
+		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
+	}
+
+	private void ButtonDecryptAndDelete_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			int count = DoDecrypt();
+
+			if (count == 0)
+			{
+				MessageBox.Show($"No {SharedConstants.FILETYPE} files found to decrypt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+			else
+			{
+				foreach (string path in _fileTree.EnumerateFiles())
+				{
+					File.Delete(path);
+				}
+
+				fileTreeView.Items.Clear();			
+			}
+		}
+		catch { }
+		finally
+		{
+			Mouse.OverrideCursor = null;
 		}
 	}
 }
