@@ -48,7 +48,10 @@
 				<Button x:Name="encryptAndDeleteButton" Padding="5,0" Click="ButtonEncryptAndDelete_Click">Encrypt And Delete</Button>
 			</UniformGrid>
 
-			<Button x:Name="decryptButton" Grid.Column="1" Padding="5,0" Click="ButtonDecrypt_Click">Decrypt</Button>
+			<UniformGrid Columns="2" Grid.Column="1">
+				<Button x:Name="decryptButton" Padding="5,0" Click="ButtonDecrypt_Click">Decrypt</Button>
+				<Button x:Name="decryptAndDeleteButton" Padding="5,0" Click="ButtonDecryptAndDelete_Click">Decrypt And Delete</Button>
+			</UniformGrid>
 		</Grid>
 	</Grid>
 </Window>
