@@ -34,14 +34,23 @@ public partial class FolderListPage : ContentPage
 
 	void Choose(string s)
 	{
-		_currentPath = Path.Combine(_currentPath, s);
-		Load();
+		string a = _currentPath;
+
+		try
+		{
+			_currentPath = $"{Path.Combine(_currentPath, s.Trim('/'))}/";
+			Load();
+		}
+		catch { throw; }
 	}
 
 	void Back()
 	{
-		_currentPath = Path.Combine(_currentPath.Split().SubFromEnd(0, 1));
+		string s = _currentPath;
+		_currentPath = $"/{Path.Combine(_currentPath.Split('/').SubFromEnd(0, 2))}/";
 		Load();
+
+		//throw new Exception($"{s} => {_currentPath}");
 	}
 
 	void Load()
