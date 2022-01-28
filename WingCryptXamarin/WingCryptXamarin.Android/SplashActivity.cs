@@ -30,7 +30,7 @@ namespace WingCryptXamarin.Droid
         protected override void OnResume()
         {
             base.OnResume();
-            Task startupWork = new Task(() => { SimulateStartup(); });
+            Task startupWork = new Task(SimulateStartup);
             startupWork.Start();
         }
 
