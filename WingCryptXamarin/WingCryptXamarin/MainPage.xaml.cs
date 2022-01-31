@@ -19,10 +19,10 @@ public partial class MainPage : ContentPage
 	{
 		//IEnumerable<FileResult> result = await FilePicker.PickMultipleAsync();
 		//explainLabel.Text = $"Changed! {string.Join(", ", from x in result select x.FileName)}";
-
-		await Navigation.PushModalAsync(new FolderListPage(AddItem));
-
-		
+		if (!FolderListPage.Opened)
+		{
+			await Navigation.PushModalAsync(new FolderListPage(AddItem));
+		}
 	}
 
 	private void AddItem(object sender, string s)

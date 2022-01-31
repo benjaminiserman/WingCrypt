@@ -20,8 +20,12 @@ public partial class FolderListPage : ContentPage
 
 	private string _currentPath = "/sdcard/";
 
+	public static bool Opened { get; private set; }
+
 	public FolderListPage(Action<object, string> callback)
 	{
+		Opened = true;
+
 		InitializeComponent();
 
 		OnFinish += callback;
@@ -46,7 +50,11 @@ public partial class FolderListPage : ContentPage
 
 	protected override bool OnBackButtonPressed()
 	{
-		if (_currentPath == "/sdcard/") return base.OnBackButtonPressed();
+		if (_currentPath == "/sdcard/")
+		{
+			Opened = false;
+			return base.OnBackButtonPressed();
+		}
 		else
 		{
 			Back();
@@ -63,6 +71,8 @@ public partial class FolderListPage : ContentPage
 		Choose(FileList.SelectedItem.ToString());
 		OnFinish(this, _currentPath);
 
+		Opened = false;
+
 		await Navigation.PopModalAsync();	
 	}
 
@@ -72,5 +82,7 @@ public partial class FolderListPage : ContentPage
 
 		Choose(FileList.SelectedItem.ToString());
 		Load();
+
+		FileList.SelectedItem = null;
 	}
 }
