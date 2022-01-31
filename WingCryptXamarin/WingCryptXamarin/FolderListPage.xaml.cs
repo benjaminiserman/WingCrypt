@@ -16,42 +16,22 @@ public partial class FolderListPage : ContentPage
 {
 	public ObservableCollection<string> Items { get; set; }
 
+	private event Action<object, string> OnFinish;
+
 	private string _currentPath = "/sdcard/";
 
-	public FolderListPage()
+	public FolderListPage(Action<object, string> callback)
 	{
 		InitializeComponent();
 
+		OnFinish += callback;
+
 		Load();
 	}
 
-	void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
-	{
-		if (e.Item == null) return;
+	void Choose(string s) => _currentPath = $"{Path.Combine(_currentPath, s.Trim('/'))}/";
 
-		Choose(((ListView)sender).SelectedItem.ToString());
-	}
-
-	void Choose(string s)
-	{
-		string a = _currentPath;
-
-		try
-		{
-			_currentPath = $"{Path.Combine(_currentPath, s.Trim('/'))}/";
-			Load();
-		}
-		catch { throw; }
-	}
-
-	void Back()
-	{
-		string s = _currentPath;
-		_currentPath = $"/{Path.Combine(_currentPath.Split('/').SubFromEnd(0, 2))}/";
-		Load();
-
-		//throw new Exception($"{s} => {_currentPath}");
-	}
+	void Back() => _currentPath = $"/{Path.Combine(_currentPath.Split('/').SubFromEnd(0, 2))}/";
 
 	void Load()
 	{
@@ -61,8 +41,36 @@ public partial class FolderListPage : ContentPage
 
 		Items = new ObservableCollection<string>(directories);
 
-		MyListView.ItemsSource = Items;
+		FileList.ItemsSource = Items;
 	}
 
-	private void BackButtonClicked(object sender, EventArgs e) => Back();
+	protected override bool OnBackButtonPressed()
+	{
+		if (_currentPath == "/sdcard/") return base.OnBackButtonPressed();
+		else
+		{
+			Back();
+			Load();
+
+			return true;
+		}
+	}
+
+	private async void SelectButtonClicked(object sender, EventArgs e)
+	{
+		if (FileList.SelectedItem is null) return;
+
+		Choose(FileList.SelectedItem.ToString());
+		OnFinish(this, _currentPath);
+
+		await Navigation.PopModalAsync();	
+	}
+
+	private void OpenButtonClicked(object sender, EventArgs e)
+	{
+		if (FileList.SelectedItem is null) return;
+
+		Choose(FileList.SelectedItem.ToString());
+		Load();
+	}
 }

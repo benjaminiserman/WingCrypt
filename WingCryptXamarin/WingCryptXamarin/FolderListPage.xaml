@@ -4,10 +4,9 @@
              x:Class="WingCryptXamarin.FolderListPage">
 
 	<Grid RowDefinitions="*, 50">
-		<ListView x:Name="MyListView"
+		<ListView x:Name="FileList"
 			Grid.Row="0"
             ItemsSource="{Binding Items}"
-            ItemTapped="Handle_ItemTapped"
             CachingStrategy="RecycleElement">
 			<ListView.ItemTemplate>
 				<DataTemplate>
@@ -16,7 +15,12 @@
 			</ListView.ItemTemplate>
 		</ListView>
 
-		<AbsoluteLayout Grid.Row="1">
+		<Grid ColumnDefinitions="*, *" Grid.Row="1">
+			<Button Text="Select" Clicked="SelectButtonClicked" Grid.Column="0"/>
+			<Button Text="Open" Clicked="OpenButtonClicked" Grid.Column="1"/>
+		</Grid>
+
+		<!--<AbsoluteLayout Grid.Row="1">
 			<Button Text="←"
 					VerticalOptions="Center"
 					HorizontalOptions="Center"
@@ -30,6 +34,6 @@
 					AbsoluteLayout.LayoutBounds=".95,.95,80,80"
 					AbsoluteLayout.LayoutFlags="PositionProportional">
 			</Button>
-		</AbsoluteLayout>
+		</AbsoluteLayout>-->
 	</Grid>
 </ContentPage>

@@ -9,7 +9,7 @@
 			<Label x:Name="explainLabel"
 				   TextColor="#8E9297"
 				   AbsoluteLayout.LayoutBounds=".5,.55"
-				   AbsoluteLayout.LayoutFlags="PositionProportional">Click the plus button at the bottom right to add files.</Label>
+				   AbsoluteLayout.LayoutFlags="PositionProportional">Click the plus button at the bottom right to add a file or folder.</Label>
 		</AbsoluteLayout>
 		<AbsoluteLayout Grid.Row="1">
 			<Button Text="+"
