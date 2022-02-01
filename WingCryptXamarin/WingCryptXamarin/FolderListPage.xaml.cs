@@ -45,7 +45,7 @@ public partial class FolderListPage : ContentPage
 
 		Items = new ObservableCollection<string>(directories);
 
-		FileList.ItemsSource = Items;
+		fileList.ItemsSource = Items;
 	}
 
 	protected override bool OnBackButtonPressed()
@@ -66,9 +66,9 @@ public partial class FolderListPage : ContentPage
 
 	private async void SelectButtonClicked(object sender, EventArgs e)
 	{
-		if (FileList.SelectedItem is null) return;
+		if (fileList.SelectedItem is null) return;
 
-		Choose(FileList.SelectedItem.ToString());
+		Choose(fileList.SelectedItem.ToString());
 		OnFinish(this, _currentPath);
 
 		Opened = false;
@@ -78,11 +78,11 @@ public partial class FolderListPage : ContentPage
 
 	private void OpenButtonClicked(object sender, EventArgs e)
 	{
-		if (FileList.SelectedItem is null) return;
+		if (fileList.SelectedItem is null) return;
 
-		Choose(FileList.SelectedItem.ToString());
+		Choose(fileList.SelectedItem.ToString());
 		Load();
 
-		FileList.SelectedItem = null;
+		fileList.SelectedItem = null;
 	}
 }

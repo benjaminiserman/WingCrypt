@@ -4,7 +4,7 @@
              x:Class="WingCryptXamarin.FolderListPage">
 
 	<Grid RowDefinitions="*, 50">
-		<ListView x:Name="FileList"
+		<ListView x:Name="fileList"
 			Grid.Row="0"
             ItemsSource="{Binding Items}"
             CachingStrategy="RecycleElement">

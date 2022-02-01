@@ -4,12 +4,27 @@
              x:Class="WingCryptXamarin.MainPage"
 			 BackgroundColor="#2F3136">
 
-	<Grid RowDefinitions="*, 50">
+	<Grid RowDefinitions="*, 50, 100">
 		<AbsoluteLayout Grid.Row="0">
 			<Label x:Name="explainLabel"
 				   TextColor="#8E9297"
 				   AbsoluteLayout.LayoutBounds=".5,.55"
-				   AbsoluteLayout.LayoutFlags="PositionProportional">Click the plus button at the bottom right to add a file or folder.</Label>
+				   AbsoluteLayout.LayoutFlags="PositionProportional">
+				Click the plus button at the bottom right to add a file or folder.
+			</Label>
+			<ListView x:Name="selectedFileList"
+				Grid.Row="0"
+				ItemsSource="{Binding Items}"
+				CachingStrategy="RecycleElement">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<TextCell Text="{Binding .}" />
+					</DataTemplate>
+				</ListView.ItemTemplate>
+				<ListView.GestureRecognizers>
+					<SwipeGestureRecognizer Direction="Right" Swiped="OnSwiped"/>
+				</ListView.GestureRecognizers>
+			</ListView>
 		</AbsoluteLayout>
 		<AbsoluteLayout Grid.Row="1">
 			<Button Text="+"
@@ -26,6 +41,12 @@
 					AbsoluteLayout.LayoutFlags="PositionProportional">
 			</Button>
 		</AbsoluteLayout>
+		<Grid Grid.Row="2" ColumnDefinitions="*, *" RowDefinitions="*, *">
+			<Button Text="Remove" Clicked="RemoveButtonClicked" Grid.Column="0" Grid.Row="0"/>
+			<Button Text="Rename" Clicked="RenameButtonClicked" Grid.Column="1" Grid.Row="0"/>
+			<Button Text="Encrypt" Clicked="EncryptButtonClicked" Grid.Column="0" Grid.Row="1"/>
+			<Button Text="Decrypt" Clicked="DecryptButtonClicked" Grid.Column="1" Grid.Row="1"/>
+		</Grid>
 	</Grid>
 
 </ContentPage>
