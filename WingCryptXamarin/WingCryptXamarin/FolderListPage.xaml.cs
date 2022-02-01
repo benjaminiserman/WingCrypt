@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,11 +40,11 @@ public partial class FolderListPage : ContentPage
 
 	void Load()
 	{
-		var directories = Directory.EnumerateDirectories(_currentPath);
+		IEnumerable<string> entries = Directory.GetFileSystemEntries(_currentPath);
 
-		directories = from x in directories select x.Substring(_currentPath.Length);
+		entries = from x in entries select x.Substring(_currentPath.Length);
 
-		Items = new ObservableCollection<string>(directories);
+		Items = new(entries);
 
 		fileList.ItemsSource = Items;
 	}
