@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WingCryptWPF", "WingCryptWPF\WingCryptWPF.csproj", "{411375B1-5A59-40B9-9558-D711A0B2EFED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingCryptShared", "WingCryptShared\WingCryptShared.csproj", "{CAE4E54B-DD05-4CB6-9E85-07EFDB96E8E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WingCryptShared", "WingCryptShared\WingCryptShared.csproj", "{CAE4E54B-DD05-4CB6-9E85-07EFDB96E8E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingCryptCommand", "WingCryptCommand\WingCryptCommand.csproj", "{5DB6AA59-BC12-4809-B0CE-8167A2AB13F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CAE4E54B-DD05-4CB6-9E85-07EFDB96E8E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAE4E54B-DD05-4CB6-9E85-07EFDB96E8E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAE4E54B-DD05-4CB6-9E85-07EFDB96E8E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DB6AA59-BC12-4809-B0CE-8167A2AB13F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DB6AA59-BC12-4809-B0CE-8167A2AB13F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DB6AA59-BC12-4809-B0CE-8167A2AB13F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DB6AA59-BC12-4809-B0CE-8167A2AB13F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
