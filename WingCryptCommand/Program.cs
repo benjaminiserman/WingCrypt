@@ -14,16 +14,33 @@ public static class Program
 				{
 					SingleEntry entry = new(options.Path);
 					Encryptor.Encrypt(entry, Path.Combine(options.Path.Split('\\')[..^1]), options.Password);
+
+					if (options.Delete)
+					{
+						string path = entry.EnumerateFiles().First();
+
+						if (Directory.Exists(path)) Directory.Delete(path, true);
+						else if (File.Exists(path)) File.Delete(path);
+					}
 				}
-				catch
+				catch (IOException)
 				{
-					throw;
+					Console.WriteLine($"Path {options.Path} was not found.");
 				}
 			})
 			.WithParsed<DecryptOptions>(options =>
 			{
-				SingleEntry entry = new(options.Path);
-				Decryptor.Decrypt(options.Path, entry.Name, options.Password);
+				try
+				{
+					SingleEntry entry = new(options.Path);
+					Decryptor.Decrypt(options.Path, entry.Name, options.Password);
+
+					if (options.Delete) File.Delete(entry.EnumerateFiles().First());
+				}
+				catch (IOException)
+				{
+					Console.WriteLine($"Path {options.Path} was not found.");
+				}
 			});
 	}
 }
