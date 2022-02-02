@@ -6,6 +6,12 @@ using Ionic.Zip;
 
 public static class Encryptor
 {
+	/// <summary>
+	/// Encrypts files contained within <paramref name="tree"/> and <paramref name="path"/>.
+	/// </summary>
+	/// <param name="tree">The file tree to be encrypted.</param>
+	/// <param name="path">The path CONTAINING THE FILE TREE to be encrypted. If you're encrypting a single file, this should be the path containing the desired path.</param>
+	/// <param name="password">The password to encrypt with.</param>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "parallel structure")]
 	public static void Encrypt(IFileTree tree, string path, string password)
 	{
