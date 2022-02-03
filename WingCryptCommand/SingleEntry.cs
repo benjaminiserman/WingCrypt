@@ -1,5 +1,4 @@
 ﻿namespace WingCryptCommand;
-
 using System.Collections.Generic;
 using WingCryptShared;
 

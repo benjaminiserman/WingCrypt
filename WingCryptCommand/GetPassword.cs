@@ -1,10 +1,6 @@
 ﻿namespace WingCryptCommand;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
 using System.Text;
-using System.Threading.Tasks;
 
 // Borrowed (with some modifications!) from https://stackoverflow.com/a/3404464, thanks Damian Leszczyński - Vash!
 internal static class GetPassword

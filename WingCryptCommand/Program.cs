@@ -1,7 +1,6 @@
 ﻿namespace WingCryptCommand;
-
-using CommandLine;
 using System.Security.Cryptography;
+using CommandLine;
 using WingCryptShared;
 
 public static class Program
