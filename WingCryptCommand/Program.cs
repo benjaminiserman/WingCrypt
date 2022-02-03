@@ -1,6 +1,7 @@
 ﻿namespace WingCryptCommand;
 
 using CommandLine;
+using System.Security.Cryptography;
 using WingCryptShared;
 
 public static class Program
@@ -38,9 +39,9 @@ public static class Program
 				else if (File.Exists(path)) File.Delete(path);
 			}
 		}
-		catch (IOException)
+		catch (IOException e)
 		{
-			Console.WriteLine($"Path {options.Path} was not found.");
+			Console.WriteLine(e.Message);
 		}
 	}
 
@@ -53,9 +54,17 @@ public static class Program
 
 			if (options.Delete) File.Delete(entry.EnumerateFiles().First());
 		}
-		catch (IOException)
+		catch (IOException e)
 		{
-			Console.WriteLine($"Path {options.Path} was not found.");
+			Console.WriteLine(e.Message);
+		}
+		catch (ZipException)
+		{
+			Console.WriteLine($"Cannot decrypt {options.Path} because file or directory {options.Path[..^SharedConstants.FILETYPE.Length]} already exists.");
+		}
+		catch (CryptographicException)
+		{
+			Console.WriteLine($"Decryption failed. Your password may be incorrect.");
 		}
 	}
 }
