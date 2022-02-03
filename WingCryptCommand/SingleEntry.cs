@@ -11,7 +11,22 @@ internal class SingleEntry : IFileTree
 	public SingleEntry(string path)
 	{
 		Path = path;
-		Name = string.Join('.', path.Split('.')[..^1]);
+		string[] split = path.Split('.');
+		
+		Name = string.Join('.', split[..^1]);
+
+		if (string.IsNullOrWhiteSpace(Name))
+		{
+			Name = path;
+		}
+
+		if (string.IsNullOrWhiteSpace(Name))
+		{
+			throw new ArgumentException($"Name could not be determined from path {path}. You may want to try renaming your path.");
+		}
+
+		Console.WriteLine($"{path}: {split.Length}");
+		Console.WriteLine($"Name: {Name}");
 	}
 
 	public IEnumerable<string> EnumerateFiles()

@@ -1,4 +1,5 @@
 ﻿namespace WingCryptCommand;
+using System.Linq;
 using System.Security.Cryptography;
 using CommandLine;
 using WingCryptShared;
@@ -12,7 +13,7 @@ public static class Program
 			.WithParsed<DecryptOptions>(options => Decrypt(new(options)))
 			.WithParsed<DoOptions>(options =>
 			{
-				if (options.Path.Length > SharedConstants.FILETYPE.Length && options.Path[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE)
+				if (options.Path.Length >= SharedConstants.FILETYPE.Length && options.Path[^SharedConstants.FILETYPE.Length..] == SharedConstants.FILETYPE)
 				{
 					Decrypt(new(options));
 				}
@@ -67,6 +68,13 @@ public static class Program
 			}
 
 			SingleEntry entry = new(options.Path);
+
+			if (entry.Name[0] == '.' && entry.Name.Count(x => x == '.') == 1)
+			{
+				Console.WriteLine("Decrypting that file would result in a null folder, since it starts with a '.'. Rename the file and try again.");
+				return;
+			}
+
 			Decryptor.Decrypt(options.Path, entry.Name, options.Password);
 
 			Console.WriteLine("Decryption complete.");
