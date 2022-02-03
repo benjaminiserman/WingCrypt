@@ -12,7 +12,7 @@ internal class EncryptOptions
 	[Option('p', "path", Required = true, HelpText = "The path to be encrypted.")]
 	public string Path { get; set; }
 
-	[Option('k', "key", Required = true, HelpText = "The password (not technically a key) to be used in encryption.")]
+	[Option('k', "key", Default = null, HelpText = "The password (not technically a key) to be used in encryption.")]
 	public string Password { get; set; }
 
 	[Option('d', "delete", Default = false, HelpText = "Delete path after encryption is complete.")]
@@ -25,7 +25,7 @@ internal class DecryptOptions
 	[Option('p', "path", Required = true, HelpText = "The path to be decrypted.")]
 	public string Path { get; set; }
 
-	[Option('k', "key", Required = true, HelpText = "The password (not technically a key) to be used in decryption.")]
+	[Option('k', "key", Default = null, HelpText = "The password (not technically a key) to be used in decryption.")]
 	public string Password { get; set; }
 
 	[Option('d', "delete", Default = false, HelpText = "Delete path after decryption is complete.")]
@@ -38,7 +38,7 @@ internal class DoOptions
 	[Option('p', "path", Required = true, HelpText = "The path to be encrypted/decrypted.")]
 	public string Path { get; set; }
 
-	[Option('k', "key", Required = true, HelpText = "The password (not technically a key) to be used in encryption/decryption.")]
+	[Option('k', "key", Default = null, HelpText = "The password (not technically a key) to be used in encryption/decryption.")]
 	public string Password { get; set; }
 
 	[Option('d', "delete", Default = false, HelpText = "Delete path after encryption/decryption is complete.")]
@@ -48,7 +48,7 @@ internal class DoOptions
 internal class Options
 {
 	public string Path { get; private set; }
-	public string Password { get; private set; }
+	public string Password { get; set; }
 	public bool Delete { get; private set; }
 
 	public Options(EncryptOptions e)

@@ -28,6 +28,17 @@ public static class Program
 	{
 		try
 		{
+			if (options.Password is null)
+			{
+				options.Password = GetPassword.Get(true).ToString();
+
+				if (options.Password != GetPassword.Get(false).ToString())
+				{
+					Console.WriteLine("Passwords did not match.");
+					return;
+				}
+			}
+
 			SingleEntry entry = new(options.Path);
 			Encryptor.Encrypt(entry, Path.Combine(options.Path.Split('\\')[..^1]), options.Password);
 
@@ -51,6 +62,11 @@ public static class Program
 	{
 		try
 		{
+			if (options.Password is null)
+			{
+				options.Password = GetPassword.Get(true).ToString();
+			}
+
 			SingleEntry entry = new(options.Path);
 			Decryptor.Decrypt(options.Path, entry.Name, options.Password);
 
