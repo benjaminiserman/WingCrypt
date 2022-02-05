@@ -50,7 +50,7 @@ public static class Program
 				else if (File.Exists(path)) File.Delete(path);
 			}
 
-			Console.Write("Encryption complete.");
+			Console.WriteLine("Encryption complete.");
 		}
 		catch (IOException e)
 		{
