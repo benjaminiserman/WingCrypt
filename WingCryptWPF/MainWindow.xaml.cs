@@ -326,6 +326,7 @@ public partial class MainWindow : Window
 	{
 		try
 		{
+			
 			string confirm = PasswordDialog.GetPassword();
 
 			if (confirm == passwordTextBox.Password)
