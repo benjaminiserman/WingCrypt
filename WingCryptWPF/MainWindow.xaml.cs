@@ -55,32 +55,37 @@ public partial class MainWindow : Window
 		{
 			foreach (string fileName in dialog.FileNames)
 			{
-				string working = fileName;
-				if (working.Length >= DEFAULT_FILE_NAME.Length && working[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME) // for selecting directories
-				{
-					working = working[..^(DEFAULT_FILE_NAME.Length + 1)];
-				}
-
-				bool isFile = File.Exists(working);
-				bool isDirectory = Directory.Exists(working);
-
-				if (!isFile && !isDirectory)
-				{
-					MessageBox.Show($"File or directory {working} does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
-
-				if ((isDirectory && ContainsAll(fileTreeView.Items, working)) ||
-					(isFile && ContainsNode(fileTreeView.Items, working)))
-				{
-					MessageBox.Show($"Files to Encrypt/Decrypt already contains {working}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
-
-				int matches = 0;
-				AddNodeRecursive(GetNode(fileTreeView.Items, working, ref matches), working, true, matches);
+				AddFile(fileName);
 			}
 		}
+	}
+
+	private void AddFile(string fileName)
+	{
+		string working = fileName;
+		if (working.Length >= DEFAULT_FILE_NAME.Length && working[^DEFAULT_FILE_NAME.Length..] == DEFAULT_FILE_NAME) // for selecting directories
+		{
+			working = working[..^(DEFAULT_FILE_NAME.Length + 1)];
+		}
+
+		bool isFile = File.Exists(working);
+		bool isDirectory = Directory.Exists(working);
+
+		if (!isFile && !isDirectory)
+		{
+			MessageBox.Show($"File or directory {working} does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+
+		if ((isDirectory && ContainsAll(fileTreeView.Items, working)) ||
+			(isFile && ContainsNode(fileTreeView.Items, working)))
+		{
+			MessageBox.Show($"Files to Encrypt/Decrypt already contains {working}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+
+		int matches = 0;
+		AddNodeRecursive(GetNode(fileTreeView.Items, working, ref matches), working, true, matches);
 	}
 
 	private bool DoEncrypt()
@@ -336,6 +341,19 @@ public partial class MainWindow : Window
 		catch
 		{
 			return false;
+		}
+	}
+
+	private void FileTreeView_Drop(object send, DragEventArgs e)
+	{
+		if (e.Data.GetDataPresent(DataFormats.FileDrop))
+		{
+			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+			foreach (string x in files)
+			{
+				AddFile(x);
+			}
 		}
 	}
 }

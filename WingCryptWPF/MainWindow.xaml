@@ -16,7 +16,7 @@
 		</Grid.RowDefinitions>
 
 		<Label>Files to Encrypt/Decrypt</Label>
-		<TreeView Grid.Row="1" x:Name="fileTreeView">
+		<TreeView Grid.Row="1" x:Name="fileTreeView" Drop="FileTreeView_Drop" AllowDrop="True">
 			<TreeView.ContextMenu>
 				<ContextMenu Name="treeViewContextMenu">
 					<MenuItem Header="Remove" Click="ButtonRemove_Click"/>
