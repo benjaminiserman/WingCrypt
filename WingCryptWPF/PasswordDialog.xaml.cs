@@ -36,8 +36,13 @@ public partial class PasswordDialog : Window
 		else throw new Exception("Cancelled.");
 	}
 
-	private void ButtonConfirm_Click(object sender, RoutedEventArgs e)
+	private void ButtonConfirm_Click(object sender, RoutedEventArgs e) => DialogResult = true;
+
+	private void OnKeyDownHandler(object sender, KeyEventArgs e)
 	{
-		DialogResult = true;
+		if (e.Key == Key.Return)
+		{
+			ButtonConfirm_Click(sender, e);
+		}
 	}
 }
