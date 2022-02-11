@@ -46,7 +46,11 @@ public static class Decryptor
 		}
 		finally
 		{
-			File.Delete(zipPath);
+			try
+			{
+				File.Delete(zipPath);
+			}
+			catch { }
 		}
 	}
 }

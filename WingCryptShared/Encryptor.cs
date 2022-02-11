@@ -59,7 +59,11 @@ public static class Encryptor
 		}
 		finally
 		{
-			File.Delete(zipPath);
+			try
+			{
+				File.Delete(zipPath);
+			}
+			catch { }
 		}
 	}
 }
