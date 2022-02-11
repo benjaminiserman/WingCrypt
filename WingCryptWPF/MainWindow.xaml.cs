@@ -270,6 +270,8 @@ public partial class MainWindow : Window
 					DeleteFolders(fileTreeView.Items, item.Header.ToString());
 				}
 			}
+
+			MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 		}
 		catch (FileNotFoundException ex)
 		{
@@ -281,8 +283,6 @@ public partial class MainWindow : Window
 		}
 
 		fileTreeView.Items.Clear();
-
-		MessageBox.Show("Encryption completed.", "Encryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 	}
 
 	private void ButtonDecryptAndDelete_Click(object sender, RoutedEventArgs e)
@@ -297,12 +297,17 @@ public partial class MainWindow : Window
 			}
 			else
 			{
-				foreach (string path in _fileTree.EnumerateFiles())
+				if (MessageBox.Show($"Are you sure you want to delete the encrypted file(s)? This is irreversible.", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
 				{
-					File.Delete(path);
+					foreach (string path in _fileTree.EnumerateFiles())
+					{
+						File.Delete(path);
+					}
 				}
 
-				fileTreeView.Items.Clear();			
+				fileTreeView.Items.Clear();
+
+				MessageBox.Show("Decryption completed.", "Decryption Complete", MessageBoxButton.OK, MessageBoxImage.None);
 			}
 		}
 		catch { }
