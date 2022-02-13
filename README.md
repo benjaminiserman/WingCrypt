@@ -39,7 +39,7 @@ Linux:
 2. Unzip the file.
 3. Depending on your architecture, open either the x64 or the arm folder.
 4. Copy the three files within into your "/usr/bin" directory.
-5. Use the "wingcrypt --help" and proceed from there.
+5. Use the command "wingcrypt --help" and proceed from there.
 
 Example: "wingcrypt -p text.txt" will encrypt the file text.txt
 
