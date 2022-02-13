@@ -22,7 +22,7 @@ OR
 - You **do not** need to have .NET 6 installed
 - You have downloaded the file "linux_standalone.zip" from the latest release
 - 
-Due to low demand, standalone builds for Mac OSX are not provided. If you'd like a standalone build for Mac OSX or Linux, [contact me](mailto:winggar1228@gmail.com).
+Due to low demand, standalone builds for Mac OSX are not provided. If you'd like a standalone build for Mac OSX, [contact me](mailto:winggar1228@gmail.com).
 
 ## Usage
 
