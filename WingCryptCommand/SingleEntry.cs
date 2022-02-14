@@ -12,7 +12,7 @@ internal class SingleEntry : IFileTree
 	{
 		Path = path;
 		string[] split = path.Split('.');
-		
+
 		Name = string.Join('.', split[..^1]);
 
 		if (string.IsNullOrWhiteSpace(Name))

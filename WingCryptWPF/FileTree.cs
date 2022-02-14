@@ -120,7 +120,7 @@ internal class FileTree : IFileTree
 			}
 
 			return false;
-		}	
+		}
 	}
 
 	private static TreeViewItem Find(ItemCollection collection, string path, int matches = 0)
